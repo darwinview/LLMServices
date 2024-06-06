@@ -5,6 +5,7 @@ const app = express();
 const port = 9002;
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
 
@@ -21,8 +22,8 @@ const client = new OpenAIClient(
 app.post('/llm', (req, res) => {
 
     // Get data from request body
-    const messages = req.body.message;
-    
+    const messages = (req.body);
+
     const temperature = 1;
 
     async function getChatCompletion() {
@@ -52,7 +53,6 @@ app.post('/llm', (req, res) => {
     }
 
     getChatCompletion();
-
     
 });
 
