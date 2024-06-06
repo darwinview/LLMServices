@@ -21,43 +21,38 @@ const client = new OpenAIClient(
 app.post('/llm', (req, res) => {
 
     // Get data from request body
-    // const messages = req.body;
-
-    console.log("Invoked");
-
+    const messages = req.body.message;
     
+    const temperature = 1;
 
-    // const temperature = 1;
+    async function getChatCompletion() {
+        try {
 
-    // async function getChatCompletion() {
-    //     try {
+            const result = await client.getChatCompletions(
+                model,
+                messages,
+                {
+                    maxTokens: 4000,
+                    temperature: temperature,
+                    stop: null,
+                    top_p: 0.95,
+                    frequency_penalty: 0,
+                    presence_penalty: 0
+                }
+            );
 
-    //         const result = await client.getChatCompletions(
-    //             model,
-    //             messages,
-    //             {
-    //                 maxTokens: 4000,
-    //                 temperature: temperature,
-    //                 stop: null,
-    //                 top_p: 0.95,
-    //                 frequency_penalty: 0,
-    //                 presence_penalty: 0
-    //             }
-    //         );
+            const assistantMessage = result.choices[0].message.content;
+            console.log(assistantMessage);
 
-    //         const assistantMessage = result.choices[0].message.content;
-    //         console.log(assistantMessage);
+            res.json(assistantMessage)
 
-    //         res.json(assistantMessage)
+        } catch (error) {
+            res.json(error);
+        }
+    }
 
-    //     } catch (error) {
-    //         res.json(error);
-    //     }
-    // }
+    getChatCompletion();
 
-    // getChatCompletion();
-
-    res.json("invoked");
     
 });
 
